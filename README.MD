@@ -56,7 +56,7 @@
 
 ```
 youtube-downloader/
-├── youtube_downloader.py  # 主程序文件
+├── yt-dlp-ui-win.py  		 # 主程序文件
 └── README.md              # 说明文档
 ```
 
