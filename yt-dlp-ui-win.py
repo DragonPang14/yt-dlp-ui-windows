@@ -11,7 +11,7 @@ class YtDlpDownloader:
         # 窗口基本设置
         self.root = root
         self.root.title("YouTube 视频下载工具")
-        self.root.geometry("650x550")
+        self.root.geometry("650x600")
         self.root.resizable(True, True)
         self.root.iconbitmap(default="")  # 可替换为自定义图标路径
 
@@ -55,25 +55,42 @@ class YtDlpDownloader:
         )
         proxy_check.grid(row=1, column=2, sticky=tk.W, pady=5)
 
-        # 3. 下载目录设置
-        ttk.Label(main_frame, text="下载目录:").grid(row=2, column=0, sticky=tk.W, pady=5)
+        # 3. Cookie设置（新增）
+        ttk.Label(main_frame, text="YouTube Cookie:").grid(row=2, column=0, sticky=tk.W, pady=5)
+        self.cookie_var = tk.StringVar()
+        cookie_entry = ttk.Entry(main_frame, textvariable=self.cookie_var, width=40)
+        cookie_entry.grid(row=2, column=1, sticky=tk.W+tk.E, pady=5)
+        
+        self.use_cookie_var = tk.BooleanVar(value=False)
+        cookie_check = ttk.Checkbutton(
+            main_frame, text="使用Cookie", variable=self.use_cookie_var
+        )
+        cookie_check.grid(row=2, column=2, sticky=tk.W, pady=5)
+        
+        # Cookie帮助按钮
+        ttk.Button(
+            main_frame, text="如何获取Cookie", command=self.show_cookie_help, width=12
+        ).grid(row=2, column=3, sticky=tk.W, pady=5, padx=5)
+
+        # 4. 下载目录设置
+        ttk.Label(main_frame, text="下载目录:").grid(row=3, column=0, sticky=tk.W, pady=5)
         self.path_var = tk.StringVar(value=os.path.join(os.path.expanduser("~"), "Downloads", "YouTube"))
         path_entry = ttk.Entry(main_frame, textvariable=self.path_var, width=40)
-        path_entry.grid(row=2, column=1, sticky=tk.W+tk.E, pady=5)
+        path_entry.grid(row=3, column=1, sticky=tk.W+tk.E, pady=5)
         
         browse_btn = ttk.Button(main_frame, text="浏览", command=self.browse_directory)
-        browse_btn.grid(row=2, column=2, sticky=tk.W, pady=5, padx=5)
+        browse_btn.grid(row=3, column=2, sticky=tk.W, pady=5, padx=5)
 
-        # 4. 转换选项
-        ttk.Label(main_frame, text="格式转换:").grid(row=3, column=0, sticky=tk.W, pady=5)
+        # 5. 转换选项
+        ttk.Label(main_frame, text="格式转换:").grid(row=4, column=0, sticky=tk.W, pady=5)
         self.convert_mp4_var = tk.BooleanVar(value=True)
         convert_check = ttk.Checkbutton(
             main_frame, text="自动转换为MP4", variable=self.convert_mp4_var
         )
-        convert_check.grid(row=3, column=1, sticky=tk.W, pady=5)
+        convert_check.grid(row=4, column=1, sticky=tk.W, pady=5)
 
-        # 5. 视频质量选择
-        ttk.Label(main_frame, text="视频质量:").grid(row=4, column=0, sticky=tk.W, pady=5)
+        # 6. 视频质量选择
+        ttk.Label(main_frame, text="视频质量:").grid(row=5, column=0, sticky=tk.W, pady=5)
         self.quality_var = tk.StringVar(value="best")
         quality_options = [
             "best", "worst", "144p", "240p", "360p", 
@@ -82,12 +99,12 @@ class YtDlpDownloader:
         quality_combo = ttk.Combobox(
             main_frame, textvariable=self.quality_var, values=quality_options, state="readonly"
         )
-        quality_combo.grid(row=4, column=1, sticky=tk.W, pady=5)
+        quality_combo.grid(row=5, column=1, sticky=tk.W, pady=5)
 
-        # 6. 播放列表选项（新增）
+        # 7. 播放列表选项
         self.is_playlist_var = tk.BooleanVar(value=False)
         self.playlist_frame = ttk.LabelFrame(main_frame, text="播放列表选项", padding="10")
-        self.playlist_frame.grid(row=5, column=0, columnspan=3, sticky=tk.W+tk.E, pady=5)
+        self.playlist_frame.grid(row=6, column=0, columnspan=3, sticky=tk.W+tk.E, pady=5)
         
         self.download_all_var = tk.BooleanVar(value=True)
         self.playlist_radio_all = ttk.Radiobutton(
@@ -103,17 +120,17 @@ class YtDlpDownloader:
         # 默认隐藏播放列表选项
         self.playlist_frame.grid_remove()
 
-        # 7. 下载选项
-        ttk.Label(main_frame, text="下载选项:").grid(row=6, column=0, sticky=tk.W, pady=5)
+        # 8. 下载选项
+        ttk.Label(main_frame, text="下载选项:").grid(row=7, column=0, sticky=tk.W, pady=5)
         self.download_video_var = tk.BooleanVar(value=True)
         video_check = ttk.Checkbutton(
             main_frame, text="下载视频", variable=self.download_video_var
         )
-        video_check.grid(row=6, column=1, sticky=tk.W, pady=5)
+        video_check.grid(row=7, column=1, sticky=tk.W, pady=5)
 
-        # 8. 操作按钮
+        # 9. 操作按钮
         btn_frame = ttk.Frame(main_frame)
-        btn_frame.grid(row=7, column=0, columnspan=3, pady=15)
+        btn_frame.grid(row=8, column=0, columnspan=3, pady=15)
         
         self.download_btn = ttk.Button(
             btn_frame, text="开始下载", command=self.start_download, width=15
@@ -130,18 +147,18 @@ class YtDlpDownloader:
         )
         self.clear_btn.pack(side=tk.LEFT, padx=10)
 
-        # 9. 进度显示
-        ttk.Label(main_frame, text="下载进度:").grid(row=8, column=0, sticky=tk.W, pady=5)
+        # 10. 进度显示
+        ttk.Label(main_frame, text="下载进度:").grid(row=9, column=0, sticky=tk.W, pady=5)
         self.progress_var = tk.DoubleVar()
         self.progress_bar = ttk.Progressbar(
             main_frame, variable=self.progress_var, maximum=100
         )
-        self.progress_bar.grid(row=8, column=1, columnspan=2, sticky=tk.W+tk.E, pady=5)
+        self.progress_bar.grid(row=9, column=1, columnspan=2, sticky=tk.W+tk.E, pady=5)
 
-        # 10. 日志显示
-        ttk.Label(main_frame, text="输出日志:").grid(row=9, column=0, sticky=tk.NW, pady=5)
+        # 11. 日志显示
+        ttk.Label(main_frame, text="输出日志:").grid(row=10, column=0, sticky=tk.NW, pady=5)
         log_frame = ttk.Frame(main_frame)
-        log_frame.grid(row=9, column=1, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S, pady=5)
+        log_frame.grid(row=10, column=1, columnspan=2, sticky=tk.W+tk.E+tk.N+tk.S, pady=5)
         
         self.log_text = tk.Text(log_frame, height=8, wrap=tk.WORD)
         self.log_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -153,7 +170,7 @@ class YtDlpDownloader:
 
         # 设置列权重（让输入框随窗口拉伸）
         main_frame.columnconfigure(1, weight=1)
-        main_frame.rowconfigure(9, weight=1)
+        main_frame.rowconfigure(10, weight=1)
 
     def browse_directory(self):
         """打开文件浏览器选择下载目录"""
@@ -171,6 +188,8 @@ class YtDlpDownloader:
     def clear_inputs(self):
         """清空输入框"""
         self.url_var.set("")
+        self.cookie_var.set("")
+        self.use_cookie_var.set(False)
         self.is_playlist_var.set(False)
         self.playlist_frame.grid_remove()
         self.log_text.config(state=tk.NORMAL)
@@ -223,6 +242,25 @@ class YtDlpDownloader:
             self.is_playlist_var.set(False)
             self.playlist_frame.grid_remove()
 
+    def show_cookie_help(self):
+        """显示获取Cookie的帮助信息"""
+        help_text = """
+如何获取YouTube Cookie:
+
+1. 打开Chrome或Firefox浏览器并登录YouTube
+2. 安装"EditThisCookie"扩展程序
+3. 访问YouTube网站
+4. 点击扩展图标
+5. 复制完整的SSID字符串
+6. 粘贴到本工具的Cookie输入框中
+
+注意:
+- Cookie有有效期，过期后需要重新获取
+- 不要分享你的Cookie给他人
+- 某些情况下可能需要登录账号才能下载
+        """
+        messagebox.showinfo("获取Cookie帮助", help_text)
+
     def build_command(self):
         """构建yt-dlp命令"""
         # 基础命令
@@ -231,6 +269,14 @@ class YtDlpDownloader:
         # 代理设置
         if self.use_proxy_var.get() and self.proxy_var.get():
             cmd.extend(["--proxy", self.proxy_var.get()])
+        
+        # Cookie设置（新增）
+        if self.use_cookie_var.get() and self.cookie_var.get():
+            # 临时保存Cookie到文件
+            cookie_file = os.path.join(os.getcwd(), "cookies.txt")
+            with open(cookie_file, "w", encoding="utf-8") as f:
+                f.write(self.cookie_var.get())
+            cmd.extend(["--cookies", cookie_file])
         
         # 下载目录
         download_path = self.path_var.get()
@@ -255,7 +301,7 @@ class YtDlpDownloader:
         if not self.download_video_var.get():
             cmd.extend(["-x", "--audio-format", "mp3"])
         
-        # 播放列表选项（新增）
+        # 播放列表选项
         if self.is_playlist_var.get():
             if self.download_all_var.get():
                 # 下载整个合集
@@ -283,6 +329,11 @@ class YtDlpDownloader:
             if messagebox.askyesno("确认", "检测到可能是播放列表URL，是否验证？"):
                 self.verify_url()
                 return
+
+        # 提示用户Cookie的使用风险
+        if self.use_cookie_var.get() and not self.cookie_var.get().strip():
+            messagebox.showerror("错误", "已启用Cookie但未提供Cookie内容")
+            return
 
         # 更新UI状态
         self.is_downloading = True
@@ -324,6 +375,12 @@ class YtDlpDownloader:
 
             # 等待进程结束
             self.download_process.wait()
+
+            # 删除临时Cookie文件
+            if self.use_cookie_var.get() and self.cookie_var.get():
+                cookie_file = os.path.join(os.getcwd(), "cookies.txt")
+                if os.path.exists(cookie_file):
+                    os.remove(cookie_file)
 
             if self.is_downloading:  # 如果不是被取消的
                 if self.download_process.returncode == 0:

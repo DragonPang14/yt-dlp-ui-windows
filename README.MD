@@ -1,3 +1,6 @@
+以下是更新后的README文件，已添加Cookie相关说明：
+
+
 # YouTube 视频下载工具 (基于 yt-dlp)
 
 一个简单易用的 Windows 桌面 UI 工具，用于通过 yt-dlp 下载 YouTube 视频，支持自定义下载参数、代理设置及播放列表处理。
@@ -7,6 +10,7 @@
 - 📥 支持下载单个 YouTube 视频或完整播放列表/合集
 - 🔍 自动识别播放列表链接，可选择下载整个合集或单个视频
 - 🌐 内置代理设置（默认支持 socks5 代理）
+- 🔐 **新增 Cookie 支持**：通过导入浏览器 Cookie 绕过年龄限制和机器人验证
 - 🎨 可自定义视频质量（从 144p 到 2160p 及自动最佳/最差）
 - 🎞️ 自动转换下载内容为 MP4 格式
 - 📂 支持自定义下载目录
@@ -42,8 +46,31 @@
 4. 使用步骤：
    - 输入 YouTube 视频或播放列表 URL
    - （可选）点击「验证 URL」确认是否为播放列表
-   - 配置下载参数（代理、目录、质量等）
+   - **如需绕过年龄限制或机器人验证**：
+     1. 启用「使用 Cookie」选项
+     2. 粘贴从浏览器导出的 Cookie 字符串
+   - 配置其他下载参数（代理、目录、质量等）
    - 点击「开始下载」即可
+
+## Cookie 使用说明
+
+### 如何获取 YouTube Cookie
+
+1. 打开 Chrome 或 Firefox 浏览器并登录 YouTube
+2. 安装 "EditThisCookie" 扩展程序：
+   - [Chrome 应用商店](https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg)
+   - [Firefox 附加组件](https://addons.mozilla.org/en-US/firefox/addon/editthiscookie/)
+3. 访问 YouTube 网站
+4. 点击扩展图标，选择「Export」导出完整 Cookie
+5. 复制导出的 SSID 字符串
+6. 粘贴到工具的 Cookie 输入框中
+
+### 注意事项
+
+- Cookie 有有效期，过期后需要重新获取
+- 不要分享你的 Cookie 给他人，避免账号安全风险
+- 某些受版权保护的视频可能仍然无法下载
+- 使用 Cookie 下载的内容请遵守相关法律法规
 
 ## 注意事项
 
@@ -56,7 +83,8 @@
 
 ```
 youtube-downloader/
-├── yt-dlp-ui-win.py  		 # 主程序文件
+├── youtube_downloader.py  # 主程序文件
+├── .gitignore             # Git忽略配置
 └── README.md              # 说明文档
 ```
 
