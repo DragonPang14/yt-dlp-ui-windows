@@ -1,0 +1,35 @@
+# 常规忽略
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info
+.coverage
+.coverage.*
+.cache
+build/
+dist/
+*.egg-info/
+*.spec
+
+# 日志文件
+*.log
+
+# 临时文件
+cookies.txt
+
+# 操作系统生成的文件
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# 编辑器配置
+.idea/
+.vscode/
+*.iml
+*.swp
+
+# 虚拟环境
+venv/
+env/
+.venv/
