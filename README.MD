@@ -1,4 +1,4 @@
-以下是更新后的README文件，已添加Cookie相关说明：
+以下是根据您的文件名调整后的README文件：
 
 
 # YouTube 视频下载工具 (基于 yt-dlp)
@@ -40,7 +40,7 @@
 
 3. 运行工具：
    ```bash
-   python youtube_downloader.py
+   python yt-dlp-ui-win.py
    ```
 
 4. 使用步骤：
@@ -83,7 +83,7 @@
 
 ```
 youtube-downloader/
-├── youtube_downloader.py  # 主程序文件
+├── yt-dlp-ui-win.py       # 主程序文件
 ├── .gitignore             # Git忽略配置
 └── README.md              # 说明文档
 ```
